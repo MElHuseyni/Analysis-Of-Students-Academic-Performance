@@ -188,8 +188,9 @@ def predict_df():
     pred_series = pd.Series(result.tolist())
     pred_series = pred_series.rename('Predicated Value')
     final_df = enc_df.merge(pred_series.to_frame(), left_index=True, right_index=True)
-    to_html_predict = "<!doctype html><title> Show Predicated Values </title>" + final_df.to_html()
-    #print(to_html_predict)
+    first_half_df = final_df[:20]
+    to_html_predict = "<!doctype html><title> Show Predicated Values </title>" + first_half_df.to_html()
+    print(to_html_predict)
     return to_html_predict
 
 
