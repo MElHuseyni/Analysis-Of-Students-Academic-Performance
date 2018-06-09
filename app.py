@@ -17,7 +17,7 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','csv'])
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-
+'''
 data_file = 'flask-upload-test/data.csv'
 df = pd.read_csv(data_file)
 enc_df = pd.read_csv(data_file)
@@ -32,6 +32,7 @@ pred_series = pd.Series(result.tolist())
 pred_series = pred_series.rename('Predicated Value')
 
 final_df = enc_df.merge(pred_series.to_frame(), left_index=True, right_index=True)
+'''
 
 
 def allowed_file(filename):
@@ -162,19 +163,12 @@ def predict():
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode()
 
-    to_html_predict = "<!doctype html><title> Show Predicated Values </title>" + final_df.to_html()
-
     return '<h1> if you to see all the dataset with the predicted values press here  </h1> <a href="/predictDF"> <input type="button" value="Predict"></a>  <p> </p><img src="data:image/png;base64,{}">'.format(plot_url)
-
-
-    #print(to_html_predict)
-
-  #  return to_html_predict
-
 
 
 @app.route('/predictDF', methods=['GET'])
 def predict_df():
+
     data_file = 'flask-upload-test/data.csv'
     df = pd.read_csv(data_file)
     enc_df = pd.read_csv(data_file)
@@ -187,7 +181,7 @@ def predict_df():
     result = loaded_model.predict(df)
     pred_series = pd.Series(result.tolist())
     pred_series = pred_series.rename('Predicated Value')
-    final_df = enc_df.merge(pred_series.to_frame(), left_index=True, right_index=True)
+    final_df = df.merge(pred_series.to_frame(), left_index=True, right_index=True)
     first_half_df = final_df[:20]
     to_html_predict = "<!doctype html><title> Show Predicated Values </title>" + first_half_df.to_html()
     print(to_html_predict)
