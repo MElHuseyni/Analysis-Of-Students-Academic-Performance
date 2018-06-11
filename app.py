@@ -17,7 +17,7 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','csv'])
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-'''
+
 data_file = 'flask-upload-test/data.csv'
 df = pd.read_csv(data_file)
 enc_df = pd.read_csv(data_file)
@@ -32,7 +32,7 @@ pred_series = pd.Series(result.tolist())
 pred_series = pred_series.rename('Predicated Value')
 
 final_df = enc_df.merge(pred_series.to_frame(), left_index=True, right_index=True)
-'''
+
 
 
 def allowed_file(filename):
@@ -100,9 +100,9 @@ def plot():
     plt.title('Correlation between different features', y=1.03, size=18)
     plt.savefig(img, format='png')
     img.seek(0)
-    plot_url = base64.b64encode(img.getvalue()).decode()
+    plot_url_count = base64.b64encode(img.getvalue()).decode()
 
-    return '<img src="data:image/png;base64,{}">'.format(plot_url) + '''<a href="/abs> </a>'''
+    return render_template("plot.html",plot_url_count = plot_url_count)
 
 
 @app.route('/abs', methods=['Get'])
@@ -113,13 +113,7 @@ def plot_count():
     img.seek(0) # rewind to beginning of file
     plot_url = base64.b64encode(img.getvalue()).decode()
 
-    return '<img src="data:image/png;base64,{}">'.format(plot_url) + ''' <!doctype html>
-    
-    <title>HTML</title>
-    
-    <p> We See that students which Absence days more than 7 has low grades </p>
-    
-    '''
+    return render_template("plot.html") #render_template("plot.html",plot_url = plot_url)
 
 
 @app.route('/encode', methods=['GET'])
